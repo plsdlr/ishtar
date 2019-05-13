@@ -5,6 +5,7 @@
   "private": "true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "micro": "node myapp/micro_service.js",
     "build": "webpack"
   },
   "keywords": [],
