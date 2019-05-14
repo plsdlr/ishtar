@@ -3,16 +3,20 @@ var express = require("express");
 var myParser = require("body-parser");
 var cors = require('cors');
 var app = express();
+const ishtar = require('...');
+
 
 app.use(cors())
 
-  app.use(myParser.urlencoded({extended : true}));
-  app.post("/mint", function(request, response, next) {
-    console.log(request.body); //This prints the JSON document received (if it is a JSON document)
+app.use(myParser.urlencoded({extended : true}));
+app.post("/mint", function(request, response, next) {
+    console.log(request.body); //This prints the JSON document received (if it is a JSON document)7
+    //console.log(request.body["adress"])
+    let mint = ishtar.pray_for_servent(request.body["adress"],request.body["amount"])
     response.sendStatus(200)
     });
 
-  app.post("/transfer", function(request, response, next) {
+app.post("/transfer", function(request, response, next) {
     console.log(request.body); //This prints the JSON document received (if it is a JSON document)
     response.sendStatus(200)
     });

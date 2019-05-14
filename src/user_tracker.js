@@ -36,7 +36,7 @@ function timer(){
 
 export default function get_user_stats() {
     var time_spend = timer()
-    var tokens =  Number(_actions.length)*Number(time_spend)*0.000000001   //// needs to add _scroll_counter
+    var tokens =  Number(_actions.length)*Number(time_spend)   //// needs to add _scroll_counter
     //var _newstring = _actions.length.toString().concat("__",time_spend.toString(),"__", _scroll_counter.toString())
     console.debug(tokens)
     return tokens
