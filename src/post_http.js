@@ -1,11 +1,11 @@
 const axios = require('axios');
 var querystring = require('querystring');
 
-export default function mint_to(adress,amount){
+export function mint_to(adress,amount){
 
   axios.post('http://localhost:8080/mint',
     querystring.stringify({
-            adress: adress, 
+            adress: adress,
             amount: amount,
             client_id: 'user-client'
     }), {
@@ -13,7 +13,22 @@ export default function mint_to(adress,amount){
         "Content-Type": "application/x-www-form-urlencoded"
       }
     }).then(function(response) {
-        console.log(response);
+        //console.log(response);
     });
 
+}
+
+export function get_balance(adress){
+
+axios.get('http://localhost:8080/get_balance',
+  querystring.stringify({
+          adress: adress
+  }), {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }).then(function(response) {
+      console.log(` direct response - ${response.data}`);
+      return response.data
+  });
 }

@@ -16,6 +16,7 @@ else {
 }
 
 console.log(identity)
+document.getElementById("address").innerHTML = identity.address
 
 export default function get_adress(){
   return identity.address

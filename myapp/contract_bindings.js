@@ -1,8 +1,11 @@
 const Web3 = require('web3')
+require('dotenv').config()
 
 const web3_for_accounts = new Web3(Web3.givenProvider || 'ws://localhost:8545', null, {}) //// getting accounts here
 ///this needs to be changed
-var json = require('...')
+const json_path = process.env.json_build_path
+const json = require(json_path)
+//var json = require('/home/p/Documents/dev/PassiveToken/experimental/build/contracts/Ishtar.json');
 
 var contract = require('truffle-contract')
 

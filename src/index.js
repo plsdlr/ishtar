@@ -1,24 +1,24 @@
 import _ from 'lodash'
+import BigNumber from 'bignumber.js';
 import get_user_stats from './user_tracker.js';
 import get_adress from './wallet.js'
-import mint_to from './post_http.js';
+import {mint_to, get_balance }from './post_http.js';
 
-function component() {
+const axios = require('axios');
+var querystring = require('querystring');
+//import get_balance from './post_http.js';
 
-  //document.getElementById('todoInputForm').addEventListener('submit', post_to("0","0"));
+function _mint_tokens() {
 
   const element = document.createElement('div');
   const btn = document.createElement('button');
-
-  // Lodash, currently included via a script, is required for this line to work
-  element.innerHTML = _.join(['Hello', ':)'], ' ');
-  btn.innerHTML = 'Click me to mint tokens!';
+  btn.innerHTML = 'Mint Tokens!';
   btn.onclick = async () => {
-  const address = await get_adress();
-  const tokens = await get_user_stats();
-  console.log(tokens)
-  const a = await mint_to(address,tokens)
-}
+    const address = await get_adress();
+    const tokens = await get_user_stats();
+    console.log(tokens)
+    const a = await mint_to(address,tokens)
+  }
   element.appendChild(btn);
 
   return element;
@@ -26,4 +26,36 @@ function component() {
 
 
 
-document.body.appendChild(component());
+function _get_balance() {
+
+  var helper;
+
+  var adress = get_adress()
+  //document.getElementById('todoInputForm').addEventListener('submit', post_to("0","0"));
+
+  const element = document.createElement('div');
+  //element.setAttribute("id","balance")
+  const text = document.createElement('p');
+
+
+  axios.post('http://localhost:8080/get_balance',
+    querystring.stringify({
+      adress: adress
+    }), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }).then(function(response) {
+    console.log(` direct response - ${response.data}`);
+    element.innerHTML = BigNumber(response.data)
+  });
+
+  return element;
+}
+
+
+
+
+//document.body.appendChild(component());
+document.getElementById("token_balance").appendChild(_get_balance());
+document.getElementById("token_mint").appendChild(_mint_tokens());

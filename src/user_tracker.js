@@ -6,7 +6,6 @@ document.onclick = clickListener;
 
 window.onscroll = function (e) {
   _scroll_counter = _scroll_counter + 1;
-  console.log(_scroll_counter)
   }
 
 function clickListener(e)
@@ -25,7 +24,13 @@ function clickListener(e)
         }
       }
       //console.log(_actions)
-      console.log(timer())
+
+      // const element = document.createElement('div');
+      // const text = document.createElement('p');
+      // element.innerHTML = get_user_stats()
+
+
+      document.getElementById("token_unminted").innerHTML = get_user_stats()
   }
 
 
