@@ -4,6 +4,7 @@ require('dotenv').config()
 var express = require('express')
 var myParser = require('body-parser')
 var cors = require('cors')
+const Web3 = require('web3')
 var app = express()
 const ishtar_path = process.env.ishtar_path
 const verification_path = process.env.verification_path
@@ -36,8 +37,8 @@ app.post('/get_balance', function (request, response) {
   var pass = verification.assert_get_balance(request.body['adress'])
   if (pass == true){
     ishtar.get_balance(request.body['adress']).then(value => {
-        console.log(value)
-      response.send(value)
+        console.log(Web3.utils.BN(value).toString())
+      response.send(Web3.utils.BN(value).toString())
     })
   }else {
     response.sendStatus(400)

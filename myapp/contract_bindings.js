@@ -11,6 +11,8 @@ var contract = require('truffle-contract')
 
 var Ishtar = contract(json)
 
+//const bignumber = Web3.utils.BN
+
 //const web3 = new Web3.providers.HttpProvider("http://127.0.0.1:8545")
 
 const eventProvider = new Web3.providers.WebsocketProvider('ws://localhost:8545')
@@ -23,8 +25,9 @@ async function pray_for_servent (address, amount) {
     const accounts = await web3_for_accounts.eth.getAccounts()
     await deployed.pray_for_servent(address, Number(amount), { from: accounts[0] })
     const result = await deployed.totalSupply()
-    const newnumber = new BN(result).toString();
-    return newnumber
+    //const newnumber = Web3.utils.BN(result).toString()
+
+    return result
   }
   catch (e){
     return 'service unavailable'

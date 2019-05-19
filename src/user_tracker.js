@@ -30,7 +30,7 @@ function clickListener(e)
       // element.innerHTML = get_user_stats()
 
 
-      document.getElementById("token_unminted").innerHTML = get_user_stats()
+      document.getElementById("token_unminted").innerHTML = get_user_unminted_token()
   }
 
 
@@ -41,8 +41,18 @@ function timer(){
 
 export default function get_user_stats() {
     var time_spend = timer()
-    var tokens =  Number(_actions.length)*Number(time_spend)   //// needs to add _scroll_counter
-    //var _newstring = _actions.length.toString().concat("__",time_spend.toString(),"__", _scroll_counter.toString())
-    console.debug(tokens)
-    return tokens
+    var tokens =  Number(_actions.length)*Number(time_spend) * 0.0001  //// needs to add _scroll_counter
+    //var _newstring = _actions.length.toString().concat("__"*,time_spend.toString(),"__", _scroll_counter.toString())
+    //_now = new Date().getTime();
+    _actions = new Array();
+    _now = new Date().getTime();
+    var round = Math.round(tokens)
+    return round
   }
+
+function get_user_unminted_token(){
+  var time_spend = timer()
+  var tokens =  Number(_actions.length)*Number(time_spend) * 0.0001  //// needs to add _scroll_counter
+  var round = Math.round(tokens)
+  return round
+}
