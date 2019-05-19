@@ -23,7 +23,8 @@ async function pray_for_servent (address, amount) {
     const accounts = await web3_for_accounts.eth.getAccounts()
     await deployed.pray_for_servent(address, Number(amount), { from: accounts[0] })
     const result = await deployed.totalSupply()
-    return result
+    const newnumber = new BN(result).toString();
+    return newnumber
   }
   catch (e){
     return 'service unavailable'
