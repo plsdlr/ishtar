@@ -9,7 +9,7 @@ var querystring = require('querystring');
 //import get_balance from './post_http.js';
 
 function _mint_tokens() {
-
+  
   const element = document.createElement('div');
   const btn = document.createElement('button');
   btn.innerHTML = 'Mint Tokens!';
