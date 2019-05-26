@@ -23,16 +23,13 @@ function raiseNonce() {
 async function pray_for_servent (address, amount, signedMessage) {
   try {
     const deployed = await Ishtar.deployed()
-
     /* test var and function */
     // const accounts = await web3_for_accounts.eth.getAccounts()
     // await deployed.pray_for_servent(address, Number(amount), { from: accounts[0] })
-
     await raiseNonce()
 
     /* deployment functions */
     await deployed.pray_for_servent(address, amount, nonce, signedMessage)
-
     const result = await deployed.totalSupply()
     //const newnumber = Web3.utils.BN(result).toString()
     return result
@@ -69,11 +66,6 @@ async function transfer_blessing (addressFrom, addressTo, amount, signedMessage)
 
 }
 
-
 module.exports.pray_for_servent = pray_for_servent
 module.exports.get_balance = get_balance
 module.exports.transfer_blessing = transfer_blessing
-
-//  getcontract().then((sum) => {
-//   console.log(Number(sum));
-// });

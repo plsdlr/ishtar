@@ -4,6 +4,11 @@ import "./ERC20.sol";
 
 contract Blessing is ERC20 {
 
+    string public constant NAME = "ISHTAR";
+    string public constant SYMBOL = "ITR";
+    uint8 public constant DECIMALS = 18;
+    uint256 public constant INITIAL_SUPPLY = 0;
+
     constructor() public {}
 
     // add security to make sure only Ishtar can call
@@ -12,7 +17,6 @@ contract Blessing is ERC20 {
     }
 
     // might want to switch to transferFrom??
-    // add security to make sure only Ishtar.sol can call 
     function transferBlessing(address from, address to, uint256 value) public {
         _transfer(from, to, value);
     }
