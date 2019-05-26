@@ -3,30 +3,17 @@ pragma solidity 0.5.0;
 import "./Ownable.sol";
 
 /*
-* This contract is based on the example code from Steve Marx's article
+* This contract is based heavily on the example code from Steve Marx's article
 * 'Signing and Verifying Messages in Ethereum':
 * https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
 */
 
 contract SignAndSend {
 
-    // address owner = msg.sender;
     mapping(uint256 => bool) internal usedNonces;
 
     // Funds are sent at deployment time.
     constructor() public payable {}
-
-    // /* this is the example from the original code: use to make the other functions */
-    // function claimPayment(uint256 amount, uint256 nonce, bytes memory sig) public {
-    //     require(!usedNonces[nonce]);
-    //     usedNonces[nonce] = true;
-
-    //     // This recreates the message that was signed by the node app
-    //     bytes32 message = keccak256(abi.encodePacked(msg.sender, amount, nonce, this));
-    //     require(recoverSigner(message, sig) == owner);
-
-    //     // msg.sender.transfer(amount);
-    // }
 
     // Signature methods
     function splitSignature(bytes memory sig) internal pure returns (uint8, bytes32, bytes32) {

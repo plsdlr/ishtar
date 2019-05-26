@@ -1,20 +1,20 @@
 pragma solidity 0.5.0;
 
-// import "./MetaTransactions.sol";
 import "./SignAndSend.sol";
 import "./SafeMath.sol";
+import "./Blessing.sol";
 
-contract Ishtar is
-// MetaTransactions,
-SignAndSend {
+contract Ishtar is SignAndSend {
 
     using SafeMath for uint256;
 
-    address public ninatta;
-    address public kulitta;
+    Blessing public blessing;
+    address internal ninatta;
+    address internal kulitta;
 
-    constructor() public {
+    constructor(address _blessing) public {
         ninatta = msg.sender;
+        blessing = Blessing(_blessing);
     }
 
     function set_kulitta(address _kulitta) public {
@@ -29,13 +29,23 @@ SignAndSend {
 
     function pray_for_servent(address servant, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
         require(servant != address(0), "isthar: servent cant be void");
-        firetrial(servant);
+        firetrial(msg.sender);
+
         /* signature validation */
         // This recreates the message that was signed by the node app
         bytes32 message = keccak256(abi.encodePacked(servant, amount, nonce, this));
         // checks that message is the same as what we think it should be
         require(recoverSigner(message, signedMessage) == servant);
 
-        // _mint(servent, amount);
+        blessing.grantBlessing(servant, amount);
     }
+
+    // to do:
+    // transfer function {
+        // require(servant != address(0), "isthar: servent cant be void");
+        // firetrial(msg.sender);
+        // /* signature validation */
+        // blessing.transferBlessing();
+    // }
+
 }
