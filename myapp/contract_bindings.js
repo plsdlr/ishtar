@@ -59,7 +59,9 @@ async function transfer_blessing (addressFrom, addressTo, amount, signedMessage)
     const deployed = await Ishtar.deployed()
     await raiseNonce()
     await deployed.spend_blessing(addressFrom, addressTo, amount, nonce, signedMessage)
-
+    let fromBalance = await deployed.balanceOf(addressFrom)
+    let toBalance = await deployed.balanceOf(addressTo)
+    return (fromBalance, toBalance)
   }
   catch (e){
     return 'service unavailable'

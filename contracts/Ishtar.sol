@@ -29,6 +29,8 @@ contract Ishtar is SignAndSend {
 
     function pray_for_servent(address servant, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
         require(servant != address(0), "isthar: servent cant be void");
+        require(!usedNonces[nonce]);
+        usedNonces[nonce] = true;
         firetrial(msg.sender);
 
         /* signature validation */
@@ -40,12 +42,19 @@ contract Ishtar is SignAndSend {
         blessing.grantBlessing(servant, amount);
     }
 
-    // to do:
-    // transfer function {
-        // require(servant != address(0), "isthar: servent cant be void");
-        // firetrial(msg.sender);
-        // /* signature validation */
-        // blessing.transferBlessing();
-    // }
+    function spend_blessing(address servant, address recipient, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
+        require(servant != address(0), "isthar: servent cant be void");
+        require(!usedNonces[nonce]);
+        usedNonces[nonce] = true;
+        firetrial(msg.sender);
+
+        /* signature validation */
+        // This recreates the message that was signed by the node app
+        bytes32 message = keccak256(abi.encodePacked(servant, amount, nonce, this));
+        // checks that message is the same as what we think it should be
+        require(recoverSigner(message, signedMessage) == servant);
+
+        blessing.transferBlessing(servant, recipient, amount);
+    }
 
 }
