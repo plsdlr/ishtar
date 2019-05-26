@@ -1,6 +1,8 @@
 pragma solidity 0.5.0;
 
-import "./MetaTransactions.sol";
+// import "./MetaTransactions.sol";
+import "./SignAndSend.sol";
+import "./SafeMath.sol";
 
 contract Ishtar is
 // MetaTransactions,
@@ -25,9 +27,15 @@ SignAndSend {
         require(priest == ninatta || priest == kulitta, "isthar: failed the firetrial");
     }
 
-    function pray_for_servent(address servent, uint256 amount) public {
-        require(servent != address(0), "isthar: servent cant be void");
-        firetrial(msg.sender);
-        _mint(servent, amount);
+    function pray_for_servent(address servant, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
+        require(servant != address(0), "isthar: servent cant be void");
+        firetrial(servant);
+        /* signature validation */
+        // This recreates the message that was signed by the node app
+        bytes32 message = keccak256(abi.encodePacked(servant, amount, nonce, this));
+        // checks that message is the same as what we think it should be
+        require(recoverSigner(message, signedMessage) == servant);
+
+        // _mint(servent, amount);
     }
 }

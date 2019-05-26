@@ -1,7 +1,6 @@
 import EthCrypto from 'eth-crypto';
 var store = require('store')
 
-
 var identity = store.get('user_isthar');
 
 if (identity === undefined){
