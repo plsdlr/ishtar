@@ -16,8 +16,7 @@ Ishtar.setProvider(eventProvider)  ///THIS FAILS WITH NEW PROVIDER
 let nonce = 0;
 
 function raiseNonce() {
-  nonce = nonce + 1
-  return nonce
+  return nonce++ 
 }
 
 async function pray_for_servent (address, amount, signedMessage) {
