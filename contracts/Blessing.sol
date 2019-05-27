@@ -11,13 +11,11 @@ contract Blessing is ERC20 {
 
     constructor() public {}
 
-    // add security to make sure only Ishtar can call
-    function grantBlessing(address account, uint256 value) public {
+    function grantBlessing(address account, uint256 value) internal {
         _mint(account, value);
     }
 
-    // might want to switch to transferFrom??
-    function transferBlessing(address from, address to, uint256 value) public {
+    function transferBlessing(address from, address to, uint256 value) internal {
         _transfer(from, to, value);
     }
 

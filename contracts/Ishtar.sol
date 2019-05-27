@@ -4,17 +4,17 @@ import "./SignAndSend.sol";
 import "./SafeMath.sol";
 import "./Blessing.sol";
 
-contract Ishtar is SignAndSend {
+contract Ishtar is SignAndSend, Blessing {
 
     using SafeMath for uint256;
 
-    Blessing public blessing;
+    // Blessing public blessing;
     address internal ninatta;
     address internal kulitta;
 
     constructor(address _blessing) public {
         ninatta = msg.sender;
-        blessing = Blessing(_blessing);
+        // blessing = Blessing(_blessing);
     }
 
     function set_kulitta(address _kulitta) public {
@@ -39,7 +39,7 @@ contract Ishtar is SignAndSend {
         // checks that message is the same as what we think it should be
         require(recoverSigner(message, signedMessage) == servant);
 
-        blessing.grantBlessing(servant, amount);
+        grantBlessing(servant, amount);
     }
 
     function spend_blessing(address servant, address recipient, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
@@ -54,7 +54,7 @@ contract Ishtar is SignAndSend {
         // checks that message is the same as what we think it should be
         require(recoverSigner(message, signedMessage) == servant);
 
-        blessing.transferBlessing(servant, recipient, amount);
+        transferBlessing(servant, recipient, amount);
     }
 
 }

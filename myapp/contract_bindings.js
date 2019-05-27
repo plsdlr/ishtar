@@ -16,7 +16,7 @@ Ishtar.setProvider(eventProvider)  ///THIS FAILS WITH NEW PROVIDER
 let nonce = 0;
 
 function raiseNonce() {
-  return nonce++ 
+  return nonce++
 }
 
 async function pray_for_servent (address, amount, signedMessage) {
@@ -62,7 +62,6 @@ async function transfer_blessing (addressFrom, addressTo, amount, signedMessage)
   catch (e){
     return 'service unavailable'
   }
-
 }
 
 module.exports.pray_for_servent = pray_for_servent
