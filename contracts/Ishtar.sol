@@ -46,11 +46,9 @@ contract Ishtar is Blessing, Verify {
         //usedNonces[nonce] = true;
         firetrial(msg.sender);
         // This recreates the message that was signed by the node app
-        bytes32 message = keccak256(abi.encodePacked(servant, amount, nonce, this));
-        // checks that message is the same as what we think it should be
-        require(recoverSigner(message, signedMessage) == servant, "hash dont match");
-        // checks that the data is valid
-
+        bytes32 messageToVerify = keccak256(abi.encodePacked(servant, amount, nonce, this));
+        // checks that the data is valid: message & sender are what they should be
+        require(isValidData(servant, amount, nonce, recipient, messageToVerify, signedMessage, servant) == true);
         transferBlessing(servant, recipient, amount);
     }
 
