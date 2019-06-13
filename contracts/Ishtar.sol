@@ -11,7 +11,7 @@ contract Ishtar is Blessing, Verify {
     address internal ninatta;
     address internal kulitta;
 
-    mapping(uint256 => bool) public usedNonces;
+    mapping(uint256 => bool) internal usedNonces;
 
     constructor() public {
         ninatta = msg.sender;
@@ -30,18 +30,18 @@ contract Ishtar is Blessing, Verify {
 
     function pray_for_servent(address servant, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
         require(servant != address(0), "ishtar: servant cannot be void");
-        //require(!usedNonces[nonce], "nonce used");
-        //usedNonces[nonce] = true;
+        require(!usedNonces[nonce], "nonce used");
+        usedNonces[nonce] = true;
         firetrial(msg.sender);
-    /* checks that the data is valid: message & sender are what they should be */
+        /* checks that the data is valid: message & sender are what they should be */
         require(isValidPrayer(servant, amount, nonce, signedMessage, servant) == true, "ishtar: data not valid");
         grantBlessing(servant, amount);
     }
 
     function spend_blessing(address servant, address recipient, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
         require(servant != address(0), "isthar: servent cant be void");
-        //require(!usedNonces[nonce], "nonce used");
-        //usedNonces[nonce] = true;
+        require(!usedNonces[nonce], "nonce used");
+        usedNonces[nonce] = true;
         firetrial(msg.sender);
         /* checks that the data is valid: message & sender are what they should be */
         require(isValidSpend(servant, amount, nonce, recipient, signedMessage, servant) == true, "ishtar: data not valid");
