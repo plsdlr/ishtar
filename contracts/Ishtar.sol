@@ -56,6 +56,13 @@ contract Ishtar is Blessing, Verify {
       return rec;
     }
 
+    function checkrec_test(  uint256 nonce, string memory test, bytes memory signedMessage) public returns (address){
+      //bytes32 message = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(servant, amount, nonce, contract_adress)));
+      bytes32 message = keccak256(abi.encodePacked(nonce, test));
+      address rec = recoverSigner(message, signedMessage);
+      return rec;
+    }
+
 
     /* function rec_test(address servant, uint256 amount, uint256 nonce,address contract_adress,bytes memory signedMessage) public returns (address){
       //bytes32 message = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(servant, amount, nonce, contract_adress)));
