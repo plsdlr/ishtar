@@ -1,7 +1,5 @@
 pragma solidity ^0.5.0;
 
-
-
 contract Verify {
 
   function isValidPrayer(address a, uint256 b, uint256 c, bytes memory sig, address _sender) public view returns(bool){
