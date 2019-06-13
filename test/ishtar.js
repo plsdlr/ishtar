@@ -49,7 +49,7 @@ contract("isthar", async (accounts) => {
       // assert.equal(postPrayerBalance, 100); // sort out weird big number issue w assert
     })
 
-    it.skip("nonce check test - increments on success", async () => {
+    it.skip("metaTx fails on trying to send with wrong sig", async () => {
 
     })
 
@@ -75,13 +75,13 @@ contract("isthar", async (accounts) => {
 
     })
 
-    it.skip("nonce check test - increments on success", async () => {
+    it.skip("metaTx fails on trying to send with wrong sig", async () => {
 
     })
 
     it.skip("nonce check test - fails on resending tx", async () => {
 
-    })
+    })  
   }) // end transferring describe block
 
 }) // end contract block
