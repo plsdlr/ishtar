@@ -16,7 +16,6 @@ contract("isthar", async (accounts) => {
         { type: 'address', value: identity.address },
         { type: 'uint256', value: 100 },
         { type: 'uint256', value: 0 },
-        { type: 'address', value: ishtar.address }
       ]);
       var signature = await EthCrypto.sign(identity.privateKey, message);
       const hash_contract = await ishtar.recoverSigner(message, signature)
@@ -28,10 +27,9 @@ contract("isthar", async (accounts) => {
         { type: 'address', value: identity.address },
         { type: 'uint256', value: 100 },
         { type: 'uint256', value: 0 },
-        { type: 'address', value: ishtar.address }
       ]);
       let signature = await EthCrypto.sign(identity.privateKey, message);
-      const validated = await ishtar.isValidData(identity.address, 100, 0, ishtar.address, message, signature, identity.address);
+      const validated = await ishtar.isValidPrayer(identity.address, 100, 0, signature, identity.address);
       assert.equal(validated, true)
     })
 

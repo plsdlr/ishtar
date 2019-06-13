@@ -29,14 +29,12 @@ contract Ishtar is Blessing, Verify {
 
 
     function pray_for_servent(address servant, uint256 amount, uint256 nonce, bytes memory signedMessage) public {
-        require(servant != address(0), "isthar: servent cant be void");
+        require(servant != address(0), "ishtar: servant cannot be void");
         //require(!usedNonces[nonce], "nonce used");
         //usedNonces[nonce] = true;
         firetrial(msg.sender);
-
-        bytes32 message = keccak256(abi.encodePacked(servant, amount, nonce, this));
-        // require(ECDSA.recover(message, signedMessage) == servant, "hash dont match");
-
+    /* checks that the data is valid: message & sender are what they should be */
+        require(isValidPrayer(servant, amount, nonce, signedMessage, servant) == true, "ishtar: data not valid");
         grantBlessing(servant, amount);
     }
 
@@ -45,10 +43,8 @@ contract Ishtar is Blessing, Verify {
         //require(!usedNonces[nonce], "nonce used");
         //usedNonces[nonce] = true;
         firetrial(msg.sender);
-        // This recreates the message that was signed by the node app
-        bytes32 messageToVerify = keccak256(abi.encodePacked(servant, amount, nonce, this));
-        // checks that the data is valid: message & sender are what they should be
-        require(isValidData(servant, amount, nonce, recipient, messageToVerify, signedMessage, servant) == true);
+        /* checks that the data is valid: message & sender are what they should be */
+        // require(isValidSpend(servant, amount, nonce, recipient, signedMessage, servant) == true, "ishtar: data not valid");
         transferBlessing(servant, recipient, amount);
     }
 

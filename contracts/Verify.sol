@@ -4,7 +4,12 @@ pragma solidity ^0.5.0;
 
 contract Verify {
 
-  function isValidData(address a, uint256 b, uint256 c, address d, bytes32 message, bytes memory sig, address _sender) public view returns(bool){
+  function isValidPrayer(address a, uint256 b, uint256 c, bytes memory sig, address _sender) public view returns(bool){
+    bytes32 message = keccak256(abi.encodePacked(a, b, c));
+    return (recoverSigner(message, sig) == _sender);
+  }
+
+  function isValidSpend(address a, uint256 b, uint256 c, address d, bytes memory sig, address _sender) public view returns(bool){
     bytes32 message = keccak256(abi.encodePacked(a, b, c, d));
     return (recoverSigner(message, sig) == _sender);
   }
