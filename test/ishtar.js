@@ -1,59 +1,78 @@
 const Ishtar = artifacts.require('./Ishtar')
 const Token = artifacts.require('./ERC20')
-
 const EthCrypto = require('eth-crypto')
-
 
 let ishtar
 let token
 
-
-contract("isthar", async accounts => {
-  const createHash = (recipient, amount, nonce, contractAddress) => {
-    const signHash = EthCrypto.hash.keccak256([
-    {
-        type: 'address',
-        value: recipient
-    }, {
-        type: 'uint256',
-        value: amount
-    }, {
-        type: 'uint256',
-        value: nonce
-    }, {
-        type: 'address',
-        value: contractAddress
-    }]);
-    return signHash
-  }
-    const signHash = (hash, identity) => {
-    var signed = EthCrypto.sign(hash, identity.privateKey);
-    return signed;
-  }
-
+contract("isthar", async (accounts) => {
   before("deploy contracts", async () => {
     ishtar = await Ishtar.deployed()
     identity = EthCrypto.createIdentity();
   })
-
   describe('minting', () => {
+    it("verifies address", async () => {
+      const message = await EthCrypto.hash.keccak256([
+        { type: 'address', value: identity.address },
+        { type: 'uint256', value: 100 },
+        { type: 'uint256', value: 0 },
+        { type: 'address', value: ishtar.address }
+      ]);
+      var signature = await EthCrypto.sign(identity.privateKey, message);
+      const hash_contract = await ishtar.recoverSigner(message, signature)
+      assert.equal(hash_contract, identity.address)
+    })
 
-  it("verify hash", async () => {
-    const final_hash = createHash(identity.address,100,0,ishtar.address,identity)
-    const hash_contract = await ishtar.checkhash_test.call(identity.address,100,0,ishtar.address)
-    assert.equal(final_hash, hash_contract)
-  })
+    it("verifies data validity from client side address", async () => {
+      const message = await EthCrypto.hash.keccak256([
+        { type: 'address', value: identity.address },
+        { type: 'uint256', value: 100 },
+        { type: 'uint256', value: 0 },
+        { type: 'address', value: ishtar.address }
+      ]);
+      let signature = await EthCrypto.sign(identity.privateKey, message);
+      const validated = await ishtar.isValidData(identity.address, 100, 0, ishtar.address, message, signature, identity.address);
+      assert.equal(validated, true)
+    })
 
+    it.skip("nonce check test - increments on success", async () => {
 
-  it("get_recovered_adress", async () => {
-    const final_hash = createHash(identity.address,100,0,ishtar.address,identity)
-    const signed_hash = signHash(final_hash,identity)
-    console.log(signed_hash)
-    const re_address = await ishtar.rec_test.call(identity.address,100,0,ishtar.address,final_hash)
-    assert.equal(identity.address, re_address)
-  })
+    })
 
+    it.skip("nonce check test - fails on resending tx", async () => {
 
- })
+    })
 
-})
+    it.skip("minting works as a metaTx", async () => {
+      // add 'isValidData' function to minting function in smart contract
+      // const hash_contract = await ishtar.checkhash_test.call(identity.address,100,0,ishtar.address)
+    })
+ }) // end minting describe block
+
+  describe('transferring', async () => {
+    it.skip("test one", async () => {
+
+    })
+
+    it.skip("test two", async () => {
+
+    })
+
+    it.skip("another one if we think of one", async () => {
+
+    })
+
+    it.skip("nonce check test - increments on success", async () => {
+
+    })
+
+    it.skip("nonce check test - fails on resending tx", async () => {
+
+    })
+
+    it.skip("transferring works as a metaTx", async () => {
+
+    })
+  }) // end transferring describe block
+
+}) // end contract block
