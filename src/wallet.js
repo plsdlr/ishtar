@@ -2,55 +2,54 @@ import EthCrypto from 'eth-crypto';
 var store = require('store')
 
 var identity = store.get('user_isthar');
+var nonce = store.get('nonce_isthar');
 
-if (identity === undefined){
+if (identity === undefined || nonce == undefined){
 
   console.log("No User found, creating wallet")
   identity = EthCrypto.createIdentity();
+  nonce = 0;
   store.set('user_isthar', identity)
+  store.set('nonce_isthar', nonce)   /// nonce need to be safed , not working yet
 
 }
 else {
   console.log("User Found")
 }
 
-console.log(identity)
+
 document.getElementById("address").innerHTML = identity.address
 
-export default function get_adress(){
+export function get_adress(){
   return identity.address
 }
 
-function sign_test_data(){
-  const signHash = EthCrypto.hash.keccak256([
-    { // prefix
-        type: 'string',
-        value: 'Signed for DonationBag:'
-    }, { // sender
-        type: 'address',
-        value: identity.address
-    }, { // to
-        type: 'address',
-        value: '0x81b27afbf34b78670c90f1994935b6267dc9b169'
-    }, { // amount
-        type: 'uint256',
-        value: 21
-    }, { // nonce
-        type: 'uint256',
-        value: 1
-    }, { // relayer
-        type: 'address',
-        value: '0x74e80a2575cfaa491015631d219f7ba76e0fdf83'
-    }
-  ]);
-
-  const signature = EthCrypto.sign(
-    identity.privateKey,
-    signHash
-  );
-
-return signature
+export function get_nounce(){
+  return nonce
 }
 
+export function sign_minting(value){
+  const message = EthCrypto.hash.keccak256([
+    { type: 'address', value: identity.address },
+    { type: 'uint256', value: Number(value) },
+    { type: 'uint256', value: Number(nonce) },
+  ]);
+  const signature = EthCrypto.sign(identity.privateKey, message)
+  nonce = nonce + 1
+  store.set('nonce_isthar', nonce)
+  console.log(nonce)
+  return signature
+}
 
-console.log(sign_test_data())
+export function sign_transaction(address, value){
+  const message = EthCrypto.hash.keccak256([
+    { type: 'address', value: identity.address },
+    { type: 'address', value: address },
+    { type: 'uint256', value: Number(value) },
+    { type: 'uint256', value: Number(nonce) },
+  ]);
+  const signature = EthCrypto.sign(identity.privateKey, message )
+  nonce = nonce + 1
+  store.set('nonce_isthar', nonce)
+  return signature
+}

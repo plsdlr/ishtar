@@ -81,7 +81,7 @@ contract("isthar", async (accounts) => {
 
     it.skip("nonce check test - fails on resending tx", async () => {
 
-    })  
+    })
   }) // end transferring describe block
 
 }) // end contract block

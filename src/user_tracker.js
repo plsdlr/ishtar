@@ -23,11 +23,6 @@ function clickListener(e)
 
         }
       }
-      //console.log(_actions)
-
-      // const element = document.createElement('div');
-      // const text = document.createElement('p');
-      // element.innerHTML = get_user_stats()
 
 
       document.getElementById("token_unminted").innerHTML = get_user_unminted_token()
