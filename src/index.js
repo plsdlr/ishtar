@@ -36,65 +36,65 @@ function _mint_tokens() {
   return element;
 }
 
-// function _send_transactions_ticket(){
-//   const element = document.createElement('div');
-//   const btn1 = document.createElement('button');
-//   btn1.setAttribute("id", "Ticket");
-//   btn1.innerHTML = 'Buy Ticket Voucher';
-//   btn1.onclick = async () => {
-//     transfer(btn1);
-//   }
-//   element.appendChild(btn1);
-//   return element;
-// }
+function _send_transactions_ticket(){
+  const element = document.createElement('div');
+  const btn1 = document.createElement('button');
+  btn1.setAttribute("id", "Ticket");
+  btn1.innerHTML = 'Buy Ticket Voucher';
+  btn1.onclick = async () => {
+    transfer(btn1);
+  }
+  element.appendChild(btn1);
+  return element;
+}
 
-// function _send_transactions_space(){
-//   const element = document.createElement('div');
-//   const btn2 = document.createElement('button');
-//   btn2.setAttribute("id", "Space");
-//   btn2.innerHTML = 'Rent a Room at KW';
-//   btn2.onclick = async () => {
-//     transfer(btn2);
-//   }
-//   element.appendChild(btn2);
-//   return element;
-// }
-//
-// function _send_transactions_dinner(){
-//   const element = document.createElement('div');
-//   const btn3 = document.createElement('button');
-//   btn3.setAttribute("id", "Dinner");
-//   btn3.innerHTML = 'Get invited to a Dinner';
-//   btn3.onclick = async () => {
-//     transfer(btn3);
-//   }
-//   element.appendChild(btn3);
-//   return element;
-// }
-//
-// function _send_transactions_visit(){
-//   const element = document.createElement('div');
-//   const btn4 = document.createElement('button');
-//   btn4.setAttribute("id", "Visit");
-//   btn4.innerHTML = 'Get a Tour';
-//   btn4.onclick = async () => {
-//     transfer(btn4);
-//   }
-//   element.appendChild(btn4);
-//   return element;
-// }
-//
-// function _send_transactions_meeting(){
-//   const element = document.createElement('div');
-//   const btn5 = document.createElement('button');
-//   btn5.setAttribute("id", "Meeting");
-//   btn5.innerHTML = 'Get a Meeting';
-//   btn5.onclick = async () => {
-//     transfer(btn5);
-//   }
-//   element.appendChild(btn5);
-//   return element;
-// }
+function _send_transactions_space(){
+  const element = document.createElement('div');
+  const btn2 = document.createElement('button');
+  btn2.setAttribute("id", "Space");
+  btn2.innerHTML = 'Rent a Room at KW';
+  btn2.onclick = async () => {
+    transfer(btn2);
+  }
+  element.appendChild(btn2);
+  return element;
+}
+
+function _send_transactions_dinner(){
+  const element = document.createElement('div');
+  const btn3 = document.createElement('button');
+  btn3.setAttribute("id", "Dinner");
+  btn3.innerHTML = 'Get invited to a Dinner';
+  btn3.onclick = async () => {
+    transfer(btn3);
+  }
+  element.appendChild(btn3);
+  return element;
+}
+
+function _send_transactions_visit(){
+  const element = document.createElement('div');
+  const btn4 = document.createElement('button');
+  btn4.setAttribute("id", "Visit");
+  btn4.innerHTML = 'Get a Tour';
+  btn4.onclick = async () => {
+    transfer(btn4);
+  }
+  element.appendChild(btn4);
+  return element;
+}
+
+function _send_transactions_meeting(){
+  const element = document.createElement('div');
+  const btn5 = document.createElement('button');
+  btn5.setAttribute("id", "Meeting");
+  btn5.innerHTML = 'Get a Meeting';
+  btn5.onclick = async () => {
+    transfer(btn5);
+  }
+  element.appendChild(btn5);
+  return element;
+}
 
 
 function _get_balance() {
@@ -133,8 +133,8 @@ function _get_balance() {
 //document.body.appendChild(component());
 document.getElementById("token_balance").appendChild(_get_balance());
 document.getElementById("token_mint").appendChild(_mint_tokens());
-//document.getElementById("transfer_tickets").appendChild(_send_transactions_ticket());
-// document.getElementById("transfer_space").appendChild(_send_transactions_space());
-// document.getElementById("transfer_dinner").appendChild(_send_transactions_dinner());
-// document.getElementById("transfer_visit").appendChild(_send_transactions_visit());
-// document.getElementById("transfer_meeting").appendChild(_send_transactions_meeting());
+document.getElementById("transfer_tickets").appendChild(_send_transactions_ticket());
+document.getElementById("transfer_space").appendChild(_send_transactions_space());
+document.getElementById("transfer_dinner").appendChild(_send_transactions_dinner());
+document.getElementById("transfer_visit").appendChild(_send_transactions_visit());
+document.getElementById("transfer_meeting").appendChild(_send_transactions_meeting());
