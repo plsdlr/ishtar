@@ -20,6 +20,26 @@ console.log(adress, amount, nounce, signed_data);
 
 }
 
+export function transfer_to(adress_from, adress_to, amount, nounce, signed_data){
+console.log(adress_from, adress_to, amount, nounce, signed_data);
+  axios.post('http://localhost:8080/mint',
+    querystring.stringify({
+            adress: adress_from,
+            adress: adress_to,
+            amount: amount,
+            nounce: nounce,
+            signed: signed_data,
+            client_id: 'user-client'
+    }), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }).then(function(response) {
+        //console.log(response);
+    });
+
+}
+
 export function get_balance(adress){
 
 axios.get('http://localhost:8080/get_balance',
