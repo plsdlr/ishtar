@@ -10,14 +10,15 @@ var querystring = require('querystring');
 
 async function transfer(button){
   var name = button.id;
+  console.log(name);
   var address_send = '0xF19c2D3c7542C5c856B8BdA74E8465E5eA989C95'
   var amount_to_pay = 50;
-  // const address = await get_adress();
-  // const nounce = await get_nounce();
-  // const tokens = await get_user_stats();
-  // const signed_data = await sign_transaction(address_send, amount_to_pay)
-  // const result = await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
-  console.log(name)
+  const address = await get_adress();
+  const nounce = await get_nounce();
+  //const tokens = await get_user_stats();
+  const signed_data = await sign_transaction(address_send, amount_to_pay)
+  const result = await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
+  //console.log(name)
 }
 
 function _mint_tokens() {
