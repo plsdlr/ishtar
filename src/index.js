@@ -23,11 +23,20 @@ async function transfer(button){
   const address_send = conf['Address']
   const amount_to_pay = conf[name]
   console.log(amount_to_pay)
-  const address = await get_adress();
-  const nounce = await get_nounce();
-  const signed_data = await sign_transaction(address_send, amount_to_pay)
-  await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
-
+  const _account = document.getElementById("balance_text")
+  const account_balance = Number(_account.innerHTML)
+  console.log(account_balance)
+  if(account_balance > amount_to_pay){
+    console.log('first condition')
+    const address = await get_adress();
+    const nounce = await get_nounce();
+    const signed_data = await sign_transaction(address_send, amount_to_pay)
+    await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
+  }else if (account_balance < amount_to_pay) {
+    console.log('account balance < amount')
+    var text = document.getElementById('warning_texts')
+    text.innerHTML = 'insuffiant account balance';
+  }
 }
 
 function _mint_tokens() {
@@ -106,6 +115,14 @@ function _send_transactions_meeting(){
   return element;
 }
 
+function warning_texts(){
+  const element = document.createElement('div');
+  const text = document.createElement('p');
+  text.setAttribute("id", "warning_text");
+  element.appendChild(text);
+  return element;
+}
+
 
 function _get_balance() {
 
@@ -115,10 +132,12 @@ function _get_balance() {
   //document.getElementById('todoInputForm').addEventListener('submit', post_to("0","0"));
 
   const element_data = document.createElement('div');
-  //element.setAttribute("id","balance")
   const text = document.createElement('p');
+  text.setAttribute("id","balance_text")
+  text.innerHTML = 0;
 
   const btn = document.createElement('button');
+  btn.setAttribute("id","balance_button")
   btn.innerHTML = 'check balance';
   btn.onclick = function() {
 
@@ -148,3 +167,4 @@ document.getElementById("transfer_space").appendChild(_send_transactions_space()
 document.getElementById("transfer_dinner").appendChild(_send_transactions_dinner());
 document.getElementById("transfer_visit").appendChild(_send_transactions_visit());
 document.getElementById("transfer_meeting").appendChild(_send_transactions_meeting());
+//document.getElementById("warning_texts").appendChild(warning_texts());
