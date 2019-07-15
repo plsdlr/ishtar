@@ -12,12 +12,6 @@ var Ishtar = contract(json)
 const eventProvider = new Web3.providers.WebsocketProvider('ws://localhost:8545')
 Ishtar.setProvider(eventProvider)  ///THIS FAILS WITH NEW PROVIDER
 
-/* nonce for sending with tx */
-// let nonce = 0;
-//
-// function raiseNonce() {
-//   return nonce++
-// }
 
 async function pray_for_servent (address, amount, _nonce, signedMessage) {
   try {
@@ -49,7 +43,6 @@ async function get_balance (address) {
 
 async function transfer_blessing (addressFrom, addressTo, nonce, amount, signedMessage) {
   try {
-    console.log("Get")
     const deployed = await Ishtar.deployed()
     const accounts = await web3_for_accounts.eth.getAccounts()
     await deployed.spend_blessing(addressFrom, addressTo, amount, nonce, signedMessage, { from: accounts[0] })
