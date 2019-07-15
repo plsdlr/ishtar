@@ -59,7 +59,20 @@ contract("isthar", async (accounts) => {
  }) // end minting describe block
 
   describe('transferring', async () => {
-    it.skip("test one", async () => {
+    it("test transfer", async () => {
+      const message = await EthCrypto.hash.keccak256([
+        { type: 'address', value: identity.address },
+        { type: 'uint256', value: 100 },
+        { type: 'uint256', value: 0 },
+      ]);
+      const message2 = await EthCrypto.hash.keccak256([
+        { type: 'address', value: identity.address },
+        { type: 'address', value: identity.address },
+        { type: 'uint256', value: 100 },
+        { type: 'uint256', value: 0 },
+      ]);
+      let signature = await EthCrypto.sign(identity.privateKey, message);
+      await ishtar.spend_blessing(identity.address, 100, 0, signature);
 
     })
 

@@ -22,10 +22,10 @@ console.log(adress, amount, nounce, signed_data);
 
 export function transfer_to(adress_from, adress_to, amount, nounce, signed_data){
 console.log(adress_from, adress_to, amount, nounce, signed_data);
-  axios.post('http://localhost:8080/mint',
+  axios.post('http://localhost:8080/transfer',
     querystring.stringify({
-            adress: adress_from,
-            adress: adress_to,
+            adress_from: adress_from,
+            adress_to: adress_to,
             amount: amount,
             nounce: nounce,
             signed: signed_data,

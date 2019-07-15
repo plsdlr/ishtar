@@ -44,7 +44,7 @@ contract Ishtar is Blessing, Verify {
         usedNonces[servant][nonce] = true;
         firetrial(msg.sender);
         /* checks that the data is valid: message & sender are what they should be */
-        require(isValidSpend(servant, amount, nonce, recipient, signedMessage, servant) == true, "ishtar: data not valid");
+        require(isValidSpend(servant, recipient, amount, nonce, signedMessage, servant) == true, "ishtar: data not valid");
         transferBlessing(servant, recipient, amount);
     }
 

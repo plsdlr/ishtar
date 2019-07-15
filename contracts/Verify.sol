@@ -7,7 +7,7 @@ contract Verify {
     return (recoverSigner(message, sig) == _sender);
   }
 
-  function isValidSpend(address a, uint256 b, uint256 c, address d, bytes memory sig, address _sender) public view returns(bool){
+  function isValidSpend(address a, address b, uint256 c, uint256 d, bytes memory sig, address _sender) public view returns(bool){
     bytes32 message = keccak256(abi.encodePacked(a, b, c, d));
     return (recoverSigner(message, sig) == _sender);
   }

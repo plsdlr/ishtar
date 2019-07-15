@@ -47,13 +47,14 @@ async function get_balance (address) {
   }
 }
 
-async function transfer_blessing (addressFrom, addressTo, amount, signedMessage) {
+async function transfer_blessing (addressFrom, addressTo, nonce, amount, signedMessage) {
   try {
+    console.log("Get")
     const deployed = await Ishtar.deployed()
-    //await raiseNonce()
-    //await deployed.spend_blessing(addressFrom, addressTo, amount, nonce, signedMessage)
-    let fromBalance = await deployed.balanceOf(addressFrom)
-    let toBalance = await deployed.balanceOf(addressTo)
+    const accounts = await web3_for_accounts.eth.getAccounts()
+    await deployed.spend_blessing(addressFrom, addressTo, amount, nonce, signedMessage, { from: accounts[0] })
+    const fromBalance = await deployed.balanceOf(addressFrom)
+    const toBalance = await deployed.balanceOf(addressTo)
     return (fromBalance, toBalance)
   }
   catch (e){

@@ -26,6 +26,7 @@ app.post('/mint', function(request, response) {
 
 app.post('/transfer', function(request, response) {
     console.log(request.body) //This prints the JSON document received (if it is a JSON document)
+    ishtar.transfer_blessing(request.body['adress_from'], request.body['adress_to'], request.body['nounce'], request.body['amount'], request.body['signed'])
   response.sendStatus(200)
 })
 
