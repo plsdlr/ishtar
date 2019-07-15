@@ -8,17 +8,26 @@ const axios = require('axios');
 var querystring = require('querystring');
 
 
+var conf = {
+  'Address': '0xF19c2D3c7542C5c856B8BdA74E8465E5eA989C95',       ////Adress of the KW
+  'Ticket': 50,
+  'Visit': 150,
+  'Space': 350,
+  'Dinner': 250,
+  'Meeting': 450
+  };
+
+
 async function transfer(button){
-  var name = button.id;
-  console.log(name);
-  var address_send = '0xF19c2D3c7542C5c856B8BdA74E8465E5eA989C95'
-  var amount_to_pay = 50;
+  const name = button.id;
+  const address_send = conf['Address']
+  const amount_to_pay = conf[name]
+  console.log(amount_to_pay)
   const address = await get_adress();
   const nounce = await get_nounce();
-  //const tokens = await get_user_stats();
   const signed_data = await sign_transaction(address_send, amount_to_pay)
-  const result = await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
-  //console.log(name)
+  await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
+
 }
 
 function _mint_tokens() {
