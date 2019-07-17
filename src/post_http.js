@@ -1,11 +1,11 @@
 const axios = require('axios');
 var querystring = require('querystring');
 
-export function mint_to(adress, amount, nounce, signed_data){
-console.log(adress, amount, nounce, signed_data);
+export function mint_to(address, amount, nounce, signed_data){
+console.log(address, amount, nounce, signed_data);
   axios.post('http://localhost:8080/mint',
     querystring.stringify({
-            adress: adress,
+            address: address,
             amount: amount,
             nounce: nounce,
             signed: signed_data,
@@ -20,12 +20,12 @@ console.log(adress, amount, nounce, signed_data);
 
 }
 
-export function transfer_to(adress_from, adress_to, amount, nounce, signed_data){
-console.log(adress_from, adress_to, amount, nounce, signed_data);
+export function transfer_to(address_from, address_to, amount, nounce, signed_data){
+console.log(address_from, address_to, amount, nounce, signed_data);
   axios.post('http://localhost:8080/transfer',
     querystring.stringify({
-            adress_from: adress_from,
-            adress_to: adress_to,
+            address_from: address_from,
+            address_to: address_to,
             amount: amount,
             nounce: nounce,
             signed: signed_data,
@@ -40,11 +40,11 @@ console.log(adress_from, adress_to, amount, nounce, signed_data);
 
 }
 
-export function get_balance(adress){
+export function get_balance(address){
 
 axios.get('http://localhost:8080/get_balance',
   querystring.stringify({
-          adress: adress
+          address: address
   }), {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"

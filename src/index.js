@@ -1,36 +1,26 @@
 import _ from 'lodash'
 import BigNumber from 'bignumber.js';
 import get_user_stats from './user_tracker.js';
-import { get_adress, get_nounce, sign_minting, sign_transaction } from './wallet.js'
-import {mint_to, get_balance, transfer_to } from './post_http.js';
+import { get_address, get_nounce, sign_minting, sign_transaction } from './wallet.js'
+import { mint_to, get_balance, transfer_to } from './post_http.js';
+import { config } from './conf.js';
 
 const axios = require('axios');
 var querystring = require('querystring');
 
 
-var conf = {
-  'Address': '0xF19c2D3c7542C5c856B8BdA74E8465E5eA989C95',       ////Adress of the KW
-  'Ticket': 50,
-  'Visit': 150,
-  'Space': 350,
-  'Dinner': 250,
-  'Meeting': 450
-  };
-
-
 async function transfer(button){
   const name = button.id;
-  const address_send = conf['Address']
-  const amount_to_pay = conf[name]
+  const address_send = config['Address']
+  const amount_to_pay = config[name]
   const _account = document.getElementById('balance_text')
   const account_balance = Number(_account.innerHTML)
   if(account_balance >= amount_to_pay){
-    const address = await get_adress();
+    const address = await get_address();
     const nounce = await get_nounce();
     const signed_data = await sign_transaction(address_send, amount_to_pay)
     await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
   }else if (account_balance < amount_to_pay) {
-    console.log('account balance < amount')
     var text = document.getElementById('warning_texts')
     text.innerHTML = 'insuffiant account balance';
   }
@@ -41,11 +31,11 @@ function _mint_tokens() {
   const btn1 = document.createElement('button');
   btn1.innerHTML = 'Mint Tokens!';
   btn1.onclick = async () => {
-    const address = await get_adress();
+    const address = await get_address();
     const nounce = await get_nounce();
     const tokens = await get_user_stats();
     const signed_data = await sign_minting(tokens)
-    const result = await mint_to(address, tokens, nounce, signed_data)
+    await mint_to(address, tokens, nounce, signed_data)
   }
   element.appendChild(btn1);
 
@@ -114,7 +104,7 @@ function _send_transactions_meeting(){
 
 
 function _get_balance() {
-  var adress = get_adress()
+  var address = get_address()
   const element_data = document.createElement('div');
   const text = document.createElement('p');
   text.setAttribute('id','balance_text')
@@ -126,7 +116,7 @@ function _get_balance() {
 
     axios.post('http://localhost:8080/get_balance',
       querystring.stringify({
-        adress: adress
+        address: address
       }), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'

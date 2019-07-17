@@ -15,13 +15,13 @@ app.use(cors())
 app.use(myParser.urlencoded({ extended : true }))
 app.post('/mint', function(request, response) {
     console.log(request.body)
-  var adress = request.body['adress']
+  var address = request.body['address']
   var amount = Number(request.body['amount'])
   var nonce = request.body['nounce']
   var signature = request.body['signed']
-  var pass = verification.assert_mint(adress, amount)
+  var pass = verification.assert_mint(address, amount)
   if (pass == true){
-    ishtar.pray_for_servent(adress, amount, nonce, signature)
+    ishtar.pray_for_servent(address, amount, nonce, signature)
     response.sendStatus(200)
   }else {
     response.sendStatus(400)
@@ -29,14 +29,14 @@ app.post('/mint', function(request, response) {
 })
 
 app.post('/transfer', function(request, response) {
-  var adress_from = request.body['adress_from']
-  var adress_to = request.body['adress_to']
+  var address_from = request.body['address_from']
+  var address_to = request.body['address_to']
   var amount = Number(request.body['amount'])
   var nonce = Number(request.body['nounce'])
   var signature = request.body['signed']
-  var pass = verification.assert_transfer(adress_from, adress_from, nonce, amount)
+  var pass = verification.assert_transfer(address_from, address_from, nonce, amount)
   if (pass == true){
-    ishtar.transfer_blessing(adress_from, adress_to, nonce, amount, signature)
+    ishtar.transfer_blessing(address_from, address_to, nonce, amount, signature)
     response.sendStatus(200)
   }else {
     response.sendStatus(400)
@@ -44,10 +44,10 @@ app.post('/transfer', function(request, response) {
 })
 
 app.post('/get_balance', function (request, response) {
-  var adress = request.body['adress']
-  var pass = verification.assert_get_balance(adress)
+  var address = request.body['address']
+  var pass = verification.assert_get_balance(address)
   if (pass == true){
-    ishtar.get_balance(request.body['adress']).then(value => {
+    ishtar.get_balance(request.body['address']).then(value => {
       response.send(value.toString())
     })
   }else {

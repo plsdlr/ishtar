@@ -3,9 +3,9 @@ const assert = require('assert')
 
 const web3 = new Web3('http://localhost:8545', null)
 
-function assert_mint(adress, amount){
+function assert_mint(address, amount){
   try{
-    assert.equal(web3.utils.isAddress(adress), true, 'Not ETH Adress')
+    assert.equal(web3.utils.isAddress(address), true, 'Not ETH address')
     assert.equal(Number.isInteger(amount), true, 'Amount is not Int')
     return true
   } catch(e){
@@ -13,19 +13,19 @@ function assert_mint(adress, amount){
   }
 }
 
-function assert_get_balance(adress){
+function assert_get_balance(address){
   try{
-    assert.equal(web3.utils.isAddress(adress), true, 'Not ETH Adress')
+    assert.equal(web3.utils.isAddress(address), true, 'Not ETH address')
     return true
   } catch(e){
     return false
   }
 }
 
-function assert_transfer(adress_from, adress_send, nonce, amount){
+function assert_transfer(address_from, address_send, nonce, amount){
   try{
-    assert.equal(web3.utils.isAddress(adress_from), true, 'sender not ETH Adress')
-    assert.equal(web3.utils.isAddress(adress_send), true, 'nor ETH Adress')
+    assert.equal(web3.utils.isAddress(address_from), true, 'sender not ETH address')
+    assert.equal(web3.utils.isAddress(address_send), true, 'nor ETH address')
     assert.equal(Number.isInteger(amount), true, 'Amount is not Int')
     assert.equal(Number.isInteger(nonce), true, 'Nonce is not Int')
     return true

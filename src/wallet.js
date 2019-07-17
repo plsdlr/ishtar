@@ -20,7 +20,7 @@ else {
 
 document.getElementById("address").innerHTML = identity.address
 
-export function get_adress(){
+export function get_address(){
   return identity.address
 }
 
