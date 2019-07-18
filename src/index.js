@@ -34,8 +34,13 @@ function _mint_tokens() {
     const address = await get_address();
     const nounce = await get_nounce();
     const tokens = await get_user_stats();
-    const signed_data = await sign_minting(tokens)
-    await mint_to(address, tokens, nounce, signed_data)
+    if(Number(tokens) > 0){
+      const signed_data = await sign_minting(tokens)
+      await mint_to(address, tokens, nounce, signed_data)
+    }else {
+      var text = document.getElementById('warning_texts')
+      text.innerHTML = 'insuffiant unminted tokens';
+    }
   }
   element.appendChild(btn1);
 

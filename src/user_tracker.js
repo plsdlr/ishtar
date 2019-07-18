@@ -1,8 +1,18 @@
 var _now = new Date().getTime();
 var _actions = new Array();
 var _scroll_counter = 0;
+var update_func;
 
 document.onclick = clickListener;
+window.onload = function() {
+  main_loop();
+};
+
+
+function main_loop() {
+  update_func = setInterval(update_balance, 2000);
+}
+
 
 window.onscroll = function (e) {
   _scroll_counter = _scroll_counter + 1;
@@ -23,9 +33,6 @@ function clickListener(e)
 
         }
       }
-
-
-      document.getElementById("token_unminted").innerHTML = get_user_unminted_token()
   }
 
 
@@ -50,4 +57,8 @@ function get_user_unminted_token(){
   var tokens =  Number(_actions.length)*Number(time_spend) * 0.0001  //// needs to add _scroll_counter
   var round = Math.round(tokens)
   return round
+}
+
+function update_balance() {
+  document.getElementById("token_unminted").innerHTML = get_user_unminted_token()
 }
