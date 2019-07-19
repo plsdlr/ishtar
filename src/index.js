@@ -4,6 +4,7 @@ import get_user_stats from './user_tracker.js';
 import { get_address, get_nounce, sign_minting, sign_transaction } from './wallet.js'
 import { mint_to, get_balance, transfer_to } from './post_http.js';
 import { config } from './conf.js';
+import generate_qr from './qr_code.js';
 
 const axios = require('axios');
 var querystring = require('querystring');
@@ -20,6 +21,7 @@ async function transfer(button){
     const nounce = await get_nounce();
     const signed_data = await sign_transaction(address_send, amount_to_pay)
     await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
+    const qr = generate_qr(signed_data);
   }else if (account_balance < amount_to_pay) {
     var text = document.getElementById('warning_texts')
     text.innerHTML = 'insuffiant account balance';
