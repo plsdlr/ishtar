@@ -109,6 +109,42 @@ function _send_transactions_meeting(){
   return element;
 }
 
+function _send_transactions_studiospace(){
+  const element = document.createElement('div');
+  const btn6 = document.createElement('button');
+  btn6.setAttribute('id', 'Studiospace');
+  btn6.innerHTML = 'Rent Studiospace';
+  btn6.onclick = async () => {
+    transfer(btn6);
+  }
+  element.appendChild(btn6);
+  return element;
+}
+
+function _send_transactions_cataloges(){
+  const element = document.createElement('div');
+  const btn7 = document.createElement('button');
+  btn7.setAttribute('id', 'Cataloges');
+  btn7.innerHTML = 'Get Cataloges';
+  btn7.onclick = async () => {
+    transfer(btn7);
+  }
+  element.appendChild(btn7);
+  return element;
+}
+
+function _send_transactions_guidedtour(){
+  const element = document.createElement('div');
+  const btn8 = document.createElement('button');
+  btn8.setAttribute('id', 'GuidedTour');
+  btn8.innerHTML = 'Guided Tour';
+  btn8.onclick = async () => {
+    transfer(btn8);
+  }
+  element.appendChild(btn8);
+  return element;
+}
+
 
 function _get_balance() {
   var address = get_address()
@@ -144,3 +180,6 @@ document.getElementById('transfer_space').appendChild(_send_transactions_space()
 document.getElementById('transfer_dinner').appendChild(_send_transactions_dinner());
 document.getElementById('transfer_visit').appendChild(_send_transactions_visit());
 document.getElementById('transfer_meeting').appendChild(_send_transactions_meeting());
+document.getElementById('transfer_cataloge').appendChild(_send_transactions_cataloges());
+document.getElementById('transfer_studiospace').appendChild(_send_transactions_studiospace());
+document.getElementById('transfer_guidedtour').appendChild(_send_transactions_guidedtour());

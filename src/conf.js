@@ -4,5 +4,8 @@ export const config = {
   'Visit': 150,
   'Space': 350,
   'Dinner': 250,
-  'Meeting': 450
+  'Meeting': 450,
+  'Cataloges': 50,
+  'Studiospace':300,
+  'GuidedTour':300
   };
