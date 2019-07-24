@@ -9,13 +9,15 @@ import generate_qr from './qr_code.js';
 const axios = require('axios');
 var querystring = require('querystring');
 
+let current_balance = 0;
+
 
 async function transfer(button){
   const name = button.id;
   const address_send = config['Address']
   const amount_to_pay = config[name]
   const _account = document.getElementById('balance_text')
-  const account_balance = Number(_account.innerHTML)
+  const account_balance = Number(current_balance)
   if(account_balance >= amount_to_pay){
     const address = await get_address();
     const nounce = await get_nounce();
@@ -29,7 +31,6 @@ async function transfer(button){
 }
 
 function _mint_tokens() {
-  const element = document.createElement('div');
   const btn1 = document.createElement('button');
   btn1.innerHTML = 'Mint Tokens!';
   btn1.onclick = async () => {
@@ -39,116 +40,30 @@ function _mint_tokens() {
     if(Number(tokens) > 0){
       const signed_data = await sign_minting(tokens)
       await mint_to(address, tokens, nounce, signed_data)
-    }else {
+    } else {
       var text = document.getElementById('warning_texts')
       text.innerHTML = 'insuffiant unminted tokens';
     }
   }
-  element.appendChild(btn1);
 
-  return element;
+  return btn1;
 }
 
-function _send_transactions_ticket(){
-  const element = document.createElement('div');
-  const btn1 = document.createElement('button');
-  btn1.setAttribute('id', 'Ticket');
-  btn1.innerHTML = 'Buy Ticket Voucher';
-  btn1.onclick = async () => {
-    transfer(btn1);
-  }
-  element.appendChild(btn1);
-  return element;
-}
 
-function _send_transactions_space(){
-  const element = document.createElement('div');
-  const btn2 = document.createElement('button');
-  btn2.setAttribute('id', 'Space');
-  btn2.innerHTML = 'Rent a Room at KW';
-  btn2.onclick = async () => {
-    transfer(btn2);
+function _send_transaction_btn(btn_id, btn_text){
+  const btn = document.createElement('button');
+  btn.setAttribute('id', btn_id);
+  btn.innerHTML = btn_text;
+  btn.onclick = async () => {
+    transfer(btn);
   }
-  element.appendChild(btn2);
-  return element;
-}
-
-function _send_transactions_dinner(){
-  const element = document.createElement('div');
-  const btn3 = document.createElement('button');
-  btn3.setAttribute('id', 'Dinner');
-  btn3.innerHTML = 'Get invited to a Dinner';
-  btn3.onclick = async () => {
-    transfer(btn3);
-  }
-  element.appendChild(btn3);
-  return element;
-}
-
-function _send_transactions_visit(){
-  const element = document.createElement('div');
-  const btn4 = document.createElement('button');
-  btn4.setAttribute('id', 'Visit');
-  btn4.innerHTML = 'Get a Tour';
-  btn4.onclick = async () => {
-    transfer(btn4);
-  }
-  element.appendChild(btn4);
-  return element;
-}
-
-function _send_transactions_meeting(){
-  const element = document.createElement('div');
-  const btn5 = document.createElement('button');
-  btn5.setAttribute('id', 'Meeting');
-  btn5.innerHTML = 'Get a Meeting';
-  btn5.onclick = async () => {
-    transfer(btn5);
-  }
-  element.appendChild(btn5);
-  return element;
-}
-
-function _send_transactions_studiospace(){
-  const element = document.createElement('div');
-  const btn6 = document.createElement('button');
-  btn6.setAttribute('id', 'Studiospace');
-  btn6.innerHTML = 'Rent Studiospace';
-  btn6.onclick = async () => {
-    transfer(btn6);
-  }
-  element.appendChild(btn6);
-  return element;
-}
-
-function _send_transactions_cataloges(){
-  const element = document.createElement('div');
-  const btn7 = document.createElement('button');
-  btn7.setAttribute('id', 'Cataloges');
-  btn7.innerHTML = 'Get Cataloges';
-  btn7.onclick = async () => {
-    transfer(btn7);
-  }
-  element.appendChild(btn7);
-  return element;
-}
-
-function _send_transactions_guidedtour(){
-  const element = document.createElement('div');
-  const btn8 = document.createElement('button');
-  btn8.setAttribute('id', 'GuidedTour');
-  btn8.innerHTML = 'Guided Tour';
-  btn8.onclick = async () => {
-    transfer(btn8);
-  }
-  element.appendChild(btn8);
-  return element;
+  return btn;
 }
 
 
 function _get_balance() {
   var address = get_address()
-  const element_data = document.createElement('div');
+  const element_data = document.createElement('span');
   const text = document.createElement('p');
   text.setAttribute('id','balance_text')
   text.innerHTML = 0;
@@ -165,7 +80,7 @@ function _get_balance() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(function(response) {
-      text.innerHTML = BigNumber(response.data)
+      current_balance = text.innerHTML = BigNumber(response.data)
     });
   }
   element_data.appendChild(btn);
@@ -175,11 +90,11 @@ function _get_balance() {
 
 document.getElementById('token_balance').appendChild(_get_balance());
 document.getElementById('token_mint').appendChild(_mint_tokens());
-document.getElementById('transfer_tickets').appendChild(_send_transactions_ticket());
-document.getElementById('transfer_space').appendChild(_send_transactions_space());
-document.getElementById('transfer_dinner').appendChild(_send_transactions_dinner());
-document.getElementById('transfer_visit').appendChild(_send_transactions_visit());
-document.getElementById('transfer_meeting').appendChild(_send_transactions_meeting());
-document.getElementById('transfer_cataloge').appendChild(_send_transactions_cataloges());
-document.getElementById('transfer_studiospace').appendChild(_send_transactions_studiospace());
-document.getElementById('transfer_guidedtour').appendChild(_send_transactions_guidedtour());
+document.getElementById('transfer_tickets').appendChild(_send_transaction_btn('Ticket', 'Buy Ticket Voucher'));
+document.getElementById('transfer_space').appendChild(_send_transaction_btn('Space', 'Rent a Room at KW'));
+document.getElementById('transfer_dinner').appendChild(_send_transaction_btn('Dinner', 'Get invited to a Dinner'));
+document.getElementById('transfer_visit').appendChild(_send_transaction_btn('Visit', 'Get a Tour'));
+document.getElementById('transfer_meeting').appendChild(_send_transaction_btn('Meeting', 'Get a Meeting'));
+document.getElementById('transfer_cataloge').appendChild(_send_transaction_btn('Cataloges', 'Get Cataloges'));
+document.getElementById('transfer_studiospace').appendChild(_send_transaction_btn('Studiospace', 'Rent Studiospace'));
+document.getElementById('transfer_guidedtour').appendChild(_send_transaction_btn('GuidedTour', 'Guided Tour'));
