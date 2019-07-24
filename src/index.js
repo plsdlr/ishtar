@@ -18,15 +18,20 @@ async function transfer(button){
   const amount_to_pay = config[name]
   const _account = document.getElementById('balance_text')
   const account_balance = Number(current_balance)
+  const text = document.getElementById('warning_texts');
+
   if(account_balance >= amount_to_pay){
     const address = await get_address();
     const nounce = await get_nounce();
     const signed_data = await sign_transaction(address_send, amount_to_pay)
     await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
     const qr = generate_qr(signed_data);
-  }else if (account_balance < amount_to_pay) {
-    var text = document.getElementById('warning_texts')
+    text.innerHTML = '';
+  } else if (account_balance < amount_to_pay) {
     text.innerHTML = 'insuffiant account balance';
+    const canvas = document.getElementById('qr_code');
+    const context = canvas.getContext('2d');
+    context.clearRect(0,0,canvas.width, canvas.height);
   }
 }
 
