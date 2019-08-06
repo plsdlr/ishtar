@@ -14,11 +14,15 @@ let current_balance = 0;
 
 async function transfer(button){
   const name = button.id;
-  const address_send = config['Address']
-  const amount_to_pay = config[name]
+  const value = button.innerHTML;
+  const product = document.getElementById('product');
+  const address_send = config['Address'];
+  const amount_to_pay = config[name];
   const _account = document.getElementById('balance_text')
-  const account_balance = Number(current_balance)
+  const account_balance = Number(_account.innerHTML);
   const text = document.getElementById('warning_texts');
+
+  product.innerHTML = value;
 
   if(account_balance >= amount_to_pay){
     const address = await get_address();
@@ -26,9 +30,11 @@ async function transfer(button){
     const signed_data = await sign_transaction(address_send, amount_to_pay)
     await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
     const qr = generate_qr(signed_data);
+    text.style.display = 'none';
     text.innerHTML = '';
   } else if (account_balance < amount_to_pay) {
-    text.innerHTML = 'insuffiant account balance';
+    text.innerHTML = 'Insufficiant account balance. You need at least ' + amount_to_pay + ' for this item. Your current balance is ' + current_balance;
+    text.style.display = 'block';
     const canvas = document.getElementById('qr_code');
     const context = canvas.getContext('2d');
     context.clearRect(0,0,canvas.width, canvas.height);
@@ -57,8 +63,10 @@ function _mint_tokens() {
 
 function _send_transaction_btn(btn_id, btn_text){
   const btn = document.createElement('button');
+  const amount_to_pay = config[btn_id];
   btn.setAttribute('id', btn_id);
-  btn.innerHTML = btn_text;
+  btn.setAttribute('data-price', amount_to_pay);
+  btn.innerHTML = btn_text + ' (' + amount_to_pay + ')';
   btn.onclick = async () => {
     transfer(btn);
   }
