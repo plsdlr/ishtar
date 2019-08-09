@@ -20,24 +20,32 @@ console.log(address, amount, nounce, signed_data);
 
 }
 
-export function transfer_to(address_from, address_to, amount, nounce, signed_data){
-console.log(address_from, address_to, amount, nounce, signed_data);
-  axios.post('http://localhost:8080/transfer',
-    querystring.stringify({
+export async function transfer_to(address_from, address_to, amount, nounce, signed_data) {
+    console.log(address_from, address_to, amount, nounce, signed_data);
+
+    const response = await axios.post('http://localhost:8080/transfer',
+        querystring.stringify({
             address_from: address_from,
             address_to: address_to,
             amount: amount,
             nounce: nounce,
             signed: signed_data,
             client_id: 'user-client'
-    }), {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    }).then(function(response) {
-        //console.log(response);
-    });
+        }), {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        });
+        // .then(function (response) {
+        //     // console.log(response);
+        //     return response;
+        // })
+        // .catch(function (error) {
+        //     // console.log(error);
+        //     return error;
+        // });
 
+    return response;
 }
 
 export function get_balance(address){

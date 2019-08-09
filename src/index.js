@@ -7,38 +7,88 @@ import { config } from './conf.js';
 import generate_qr from './qr_code.js';
 
 const axios = require('axios');
-var querystring = require('querystring');
+let querystring = require('querystring');
+
+const address_send = config['Address'];
+let signed_data;
+let transaction_amount;
+let transfer_response;
 
 let current_balance = 0;
 
+const balance_text = document.getElementById('balance_text');
+const productTitle = document.getElementById('product-title');
+const warning_text = document.getElementById('warning_texts');
+
+const ishtarForm = document.getElementById('ishtar');
+const product = document.getElementById('ishtar-product');
+const qr_code_base64 = document.getElementById('ishtar-qrcode');
+const qr_signed_data = document.getElementById('ishtar-signed-data');
+
+ishtarForm.style.display = 'none';
+ishtarForm.onsubmit = function (e) {
+  e.preventDefault();
+  processTransfer();
+  // if(tranfser_response === 'OK') {
+  //   return true;
+  // }
+
+  return false;
+}
+
+function _send_transaction_btn(btn_id, btn_text){
+  const btn = document.createElement('button');
+  const amount_to_pay = config[btn_id];
+  btn.setAttribute('id', btn_id);
+  btn.setAttribute('data-price', amount_to_pay);
+  btn.innerHTML = btn_text + ' (' + amount_to_pay + ')';
+  btn.onclick = async () => {
+    transfer(btn);
+  }
+  return btn;
+}
+
 
 async function transfer(button){
+  await _get_balance();
   const name = button.id;
   const value = button.innerHTML;
-  const product = document.getElementById('product');
-  const address_send = config['Address'];
-  const amount_to_pay = config[name];
-  const _account = document.getElementById('balance_text')
-  const account_balance = Number(_account.innerHTML);
-  const text = document.getElementById('warning_texts');
+  const product_price = config[name];
 
-  product.innerHTML = value;
+  productTitle.innerHTML = value;
 
-  if(account_balance >= amount_to_pay){
-    const address = await get_address();
-    const nounce = await get_nounce();
-    const signed_data = await sign_transaction(address_send, amount_to_pay)
-    await transfer_to(address, address_send, amount_to_pay, nounce, signed_data)
-    const qr = generate_qr(signed_data);
-    text.style.display = 'none';
-    text.innerHTML = '';
-  } else if (account_balance < amount_to_pay) {
-    text.innerHTML = 'Insufficiant account balance. You need at least ' + amount_to_pay + ' for this item. Your current balance is ' + current_balance;
-    text.style.display = 'block';
-    const canvas = document.getElementById('qr_code');
-    const context = canvas.getContext('2d');
-    context.clearRect(0,0,canvas.width, canvas.height);
+  if(current_balance >= product_price){
+    product.value = value;
+    transaction_amount = product_price;
+    signed_data = await sign_transaction(address_send, product_price);
+    generate_qr(signed_data);
+
+    ishtarForm.style.display = 'block';
+    warning_text.style.display = 'none';
+    warning_text.innerHTML = '';
   }
+  else if (current_balance < product_price) {
+    transaction_amount = '';
+    signed_data = '';
+    product.value = '';
+    qr_code_base64.value = '';
+    qr_signed_data.value = '';
+    ishtarForm.style.display = 'none';
+    warning_text.innerHTML = 'Insufficiant account balance. You need at least ' + product_price + ' for this item. Your current balance is ' + current_balance;
+    warning_text.style.display = 'block';
+  }
+}
+
+
+async function processTransfer() {
+  const address = await get_address();
+  const nounce = await get_nounce();
+
+  transfer_to(address, address_send, transaction_amount, nounce, signed_data)
+      .then(function (result) {
+        transfer_response = result.data;
+        console.log('transfer_response: ' + transfer_response);
+      });
 }
 
 function _mint_tokens() {
@@ -61,31 +111,20 @@ function _mint_tokens() {
 }
 
 
-function _send_transaction_btn(btn_id, btn_text){
+function _get_balance_btn() {
   const btn = document.createElement('button');
-  const amount_to_pay = config[btn_id];
-  btn.setAttribute('id', btn_id);
-  btn.setAttribute('data-price', amount_to_pay);
-  btn.innerHTML = btn_text + ' (' + amount_to_pay + ')';
-  btn.onclick = async () => {
-    transfer(btn);
-  }
+  btn.setAttribute('id','balance_button')
+  btn.innerHTML = 'Check balance';
+  btn.onclick = function () {
+    _get_balance();
+  };
   return btn;
 }
 
-
 function _get_balance() {
-  var address = get_address()
-  const element_data = document.createElement('span');
-  const text = document.createElement('p');
-  text.setAttribute('id','balance_text')
-  text.innerHTML = 0;
-  const btn = document.createElement('button');
-  btn.setAttribute('id','balance_button')
-  btn.innerHTML = 'check balance';
-  btn.onclick = function() {
+  let address = get_address();
 
-    axios.post('http://localhost:8080/get_balance',
+  axios.post('http://localhost:8080/get_balance',
       querystring.stringify({
         address: address
       }), {
@@ -93,15 +132,13 @@ function _get_balance() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(function(response) {
-      current_balance = text.innerHTML = BigNumber(response.data)
-    });
-  }
-  element_data.appendChild(btn);
-  element_data.appendChild(text);
-  return element_data;
+    current_balance = balance_text.innerHTML = BigNumber(response.data)
+  });
 }
 
-document.getElementById('token_balance').appendChild(_get_balance());
+
+document.getElementById('token_balance').appendChild(_get_balance_btn());
+// document.getElementById('balance_text').appendChild(_get_balance());
 document.getElementById('token_mint').appendChild(_mint_tokens());
 document.getElementById('transfer_tickets').appendChild(_send_transaction_btn('Ticket', 'Buy Ticket Voucher'));
 document.getElementById('transfer_space').appendChild(_send_transaction_btn('Space', 'Rent a Room at KW'));
@@ -111,3 +148,5 @@ document.getElementById('transfer_meeting').appendChild(_send_transaction_btn('M
 document.getElementById('transfer_cataloge').appendChild(_send_transaction_btn('Cataloges', 'Get Cataloges'));
 document.getElementById('transfer_studiospace').appendChild(_send_transaction_btn('Studiospace', 'Rent Studiospace'));
 document.getElementById('transfer_guidedtour').appendChild(_send_transaction_btn('GuidedTour', 'Guided Tour'));
+
+_get_balance();

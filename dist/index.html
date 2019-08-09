@@ -8,22 +8,45 @@
   <div class="ishtar">
   <p id="address"></p>
   <p id="token_balance"> </p>
+  <p id="balance_text">0</p>
   <p id="token_mint"> </p>
-  <p id="transfer_tickets"></p>
-  <p id="transfer_space"></p>
-  <p id="transfer_dinner"></p>
-  <p id="transfer_visit"></p>
-  <p id="transfer_meeting"></p>
-  <p id="transfer_cataloge"></p>
-  <p id="transfer_studiospace"></p>
-  <p id="transfer_guidedtour"></p>
-  <p id="token_unminted"></p>
-  <p id="product"></p>
-  <p id="warning_texts"></p>
-  <canvas id="qr_code"></canvas>
+    <p id="token_unminted"></p>
+
+    <div class="text-center wallet">
+      <h1 class="h1">Spend your Ishtars</h1>
+
+      <h2>1. Select a product</h2>
+
+      <span id="transfer_tickets"></span>
+      <span id="transfer_space"></span>
+      <span id="transfer_dinner"></span>
+      <span id="transfer_visit"></span>
+      <span id="transfer_meeting"></span>
+      <span id="transfer_cataloge"></span>
+      <span id="transfer_studiospace"></span>
+      <span id="transfer_guidedtour"></span>
+
+      <div class="wallet__warning mt-x2 mb-x3 callout">
+        <h2 class="mb-x0" id="product-title"></h2>
+        <span class="mt-x2" id="warning_texts"></span>
+      </div>
+
+    </div>
+
+
+    <div class="text-center">
+
+      <div id="c9" class="frame frame-default frame-type-form_formframework frame-layout-0"><form data-abide="" novalidate="" enctype="multipart/form-data" method="post" id="ishtar" action="/ishtar/gate/checkout/?tx_form_formframework%5Baction%5D=perform&amp;tx_form_formframework%5Bcontroller%5D=FormFrontend&amp;cHash=eba111a4df49c44a109396bdb1f88030#ishtar"><div><input type="hidden" name="tx_form_formframework[ishtar][__state]" value="TzozOToiVFlQTzNcQ01TXEZvcm1cRG9tYWluXFJ1bnRpbWVcRm9ybVN0YXRlIjoyOntzOjI1OiIAKgBsYXN0RGlzcGxheWVkUGFnZUluZGV4IjtpOjA7czoxMzoiACoAZm9ybVZhbHVlcyI7YTowOnt9fQ==9217759f9d42d812c74424edc11c408681f2de68" /><input type="hidden" name="tx_form_formframework[__trustedProperties]" value="a:1:{s:6:&quot;ishtar&quot;;a:8:{s:7:&quot;product&quot;;i:1;s:4:&quot;name&quot;;i:1;s:5:&quot;email&quot;;i:1;s:21:&quot;TXdLKQoJZwI3txWAVlNaC&quot;;i:1;s:7:&quot;message&quot;;i:1;s:6:&quot;qrcode&quot;;i:1;s:11:&quot;signed-data&quot;;i:1;s:13:&quot;__currentPage&quot;;i:1;}}d5cccf4d14c0a9c4d4af49eee58c1d679c2fde23" /></div><h2>2. Fill in your info</h2><div class="form-group"><label class="control-label show-for-sr" for="ishtar-product">Product
+        <span class="required">*</span></label><div class="input"><input placeholder="Product" class="show-for-sr form-control" id="ishtar-product" type="text" name="tx_form_formframework[ishtar][product]" value="" /><span class="form-error text-left">* Pflichtfeld</span></div></div><div class="form-group"><label class="control-label show-for-sr" for="ishtar-name">Your name
+        <span class="required">*</span></label><div class="input"><input required="" placeholder="Your name *" class=" form-control" id="ishtar-name" type="text" name="tx_form_formframework[ishtar][name]" value="" /><span class="form-error text-left">* Pflichtfeld</span></div></div><div class="form-group"><label class="control-label show-for-sr" for="ishtar-email">Your email
+        <span class="required">*</span></label><div class="input"><input required="" placeholder="Your Email address *" class=" form-control" id="ishtar-email" type="text" name="tx_form_formframework[ishtar][email]" value="" /><span class="form-error text-left">* Pflichtfeld</span></div></div><input autocomplete="off" aria-hidden="true" id="ishtar-TXdLKQoJZwI3txWAVlNaC" style="position:absolute; margin:0 0 0 -999em;" tabindex="-1" type="text" name="tx_form_formframework[ishtar][TXdLKQoJZwI3txWAVlNaC]" /><div class="form-group"><label class="control-label show-for-sr" for="ishtar-message">Message</label><div class="input"><textarea placeholder="Your message" class="xxlarge form-control" id="ishtar-message" name="tx_form_formframework[ishtar][message]"></textarea><span class="form-error text-left">* Pflichtfeld</span></div></div><div class="form-group"><label class="control-label show-for-sr" for="ishtar-qrcode">QR code</label><div class="input"><input class="show-for-sr form-control" id="ishtar-qrcode" type="text" name="tx_form_formframework[ishtar][qrcode]" value="" /><span class="form-error text-left">* Pflichtfeld</span></div></div><div class="form-group"><label class="control-label show-for-sr" for="ishtar-signed-data">Signed data</label><div class="input"><input class="show-for-sr form-control" id="ishtar-signed-data" type="text" name="tx_form_formframework[ishtar][signed-data]" value="" /><span class="form-error text-left">* Pflichtfeld</span></div></div><div class="actions"><nav class="form-navigation"><div class="btn-toolbar" role="toolbar"><div class="btn-group text-right" role="group"><span class="next"><button class=" button ishtar-dark large" type="submit" name="tx_form_formframework[ishtar][__currentPage]" value="1">Next step</button></span></div></div></nav></div></form></div>
+
+
+    </div>
+
+
+
   </div>
-
-
     <script src="main.js"></script>
   </body>
 </html>

@@ -29,17 +29,17 @@ app.post('/mint', function(request, response) {
 })
 
 app.post('/transfer', function(request, response) {
-  var address_from = request.body['address_from']
-  var address_to = request.body['address_to']
-  var amount = Number(request.body['amount'])
-  var nonce = Number(request.body['nounce'])
-  var signature = request.body['signed']
-  var pass = verification.assert_transfer(address_from, address_from, nonce, amount)
+  var address_from = request.body['address_from'];
+  var address_to = request.body['address_to'];
+  var amount = Number(request.body['amount']);
+  var nonce = Number(request.body['nounce']);
+  var signature = request.body['signed'];
+  var pass = verification.assert_transfer(address_from, address_from, nonce, amount);
   if (pass == true){
     ishtar.transfer_blessing(address_from, address_to, nonce, amount, signature)
-    response.sendStatus(200)
+    response.sendStatus(200);
   }else {
-    response.sendStatus(400)
+    response.sendStatus(400);
   }
 })
 
