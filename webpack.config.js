@@ -5,5 +5,6 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist')
+    // path: '/home/olohanz/projects/statista/project/packages/statista/Resources/Public/vendor/ishtar'
   }
 };

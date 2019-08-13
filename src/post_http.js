@@ -3,7 +3,7 @@ var querystring = require('querystring');
 
 export function mint_to(address, amount, nounce, signed_data){
 console.log(address, amount, nounce, signed_data);
-  axios.post('http://localhost:8080/mint',
+  axios.post('http://nascentstudio.xyz/mint',
     querystring.stringify({
             address: address,
             amount: amount,
@@ -23,7 +23,7 @@ console.log(address, amount, nounce, signed_data);
 export async function transfer_to(address_from, address_to, amount, nounce, signed_data) {
     console.log(address_from, address_to, amount, nounce, signed_data);
 
-    const response = await axios.post('http://localhost:8080/transfer',
+    const response = await axios.post('http://nascentstudio.xyz/transfer',
         querystring.stringify({
             address_from: address_from,
             address_to: address_to,
@@ -36,21 +36,13 @@ export async function transfer_to(address_from, address_to, amount, nounce, sign
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         });
-        // .then(function (response) {
-        //     // console.log(response);
-        //     return response;
-        // })
-        // .catch(function (error) {
-        //     // console.log(error);
-        //     return error;
-        // });
 
     return response;
 }
 
 export function get_balance(address){
 
-axios.get('http://localhost:8080/get_balance',
+axios.get('http://nascentstudio.xyz/get_balance',
   querystring.stringify({
           address: address
   }), {

@@ -25,16 +25,6 @@ const product = document.getElementById('ishtar-product');
 const qr_code_base64 = document.getElementById('ishtar-qrcode');
 const qr_signed_data = document.getElementById('ishtar-signed-data');
 
-ishtarForm.style.display = 'none';
-ishtarForm.onsubmit = function (e) {
-  e.preventDefault();
-  processTransfer();
-  // if(tranfser_response === 'OK') {
-  //   return true;
-  // }
-
-  return false;
-}
 
 function _send_transaction_btn(btn_id, btn_text){
   const btn = document.createElement('button');
@@ -60,8 +50,10 @@ async function transfer(button){
   if(current_balance >= product_price){
     product.value = value;
     transaction_amount = product_price;
-    signed_data = await sign_transaction(address_send, product_price);
-    generate_qr(signed_data);
+    // signed_data = await sign_transaction(address_send, product_price);
+    // generate_qr(signed_data);
+
+    // await processTransfer();
 
     ishtarForm.style.display = 'block';
     warning_text.style.display = 'none';
@@ -83,13 +75,27 @@ async function transfer(button){
 async function processTransfer() {
   const address = await get_address();
   const nounce = await get_nounce();
+  const signed_data = await sign_transaction(address_send, transaction_amount);
 
-  transfer_to(address, address_send, transaction_amount, nounce, signed_data)
-      .then(function (result) {
-        transfer_response = result.data;
-        console.log('transfer_response: ' + transfer_response);
-      });
+  await generate_qr(signed_data).then(function(result) {
+    qr_code_base64.value = result;
+    qr_signed_data.value = signed_data;
+    console.log('generate_qr result: ' + result);
+  });
+
+  console.log('post generate_qr');
+
+  console.log('processTransfer');
+  console.log(address, address_send, transaction_amount, nounce, signed_data);
+
+  const transfer_result = await transfer_to(address, address_send, transaction_amount, nounce, signed_data);
+
+  console.log('transfer_result: ' + transfer_result.data);
+
+  return transfer_result;
+  // return 'OK';
 }
+
 
 function _mint_tokens() {
   const btn1 = document.createElement('button');
@@ -121,10 +127,11 @@ function _get_balance_btn() {
   return btn;
 }
 
+
 function _get_balance() {
   let address = get_address();
 
-  axios.post('http://localhost:8080/get_balance',
+  axios.post('http://nascentstudio.xyz/get_balance',
       querystring.stringify({
         address: address
       }), {
@@ -136,17 +143,50 @@ function _get_balance() {
   });
 }
 
+$(document).ready(function () {
 
-document.getElementById('token_balance').appendChild(_get_balance_btn());
-// document.getElementById('balance_text').appendChild(_get_balance());
-document.getElementById('token_mint').appendChild(_mint_tokens());
-document.getElementById('transfer_tickets').appendChild(_send_transaction_btn('Ticket', 'Buy Ticket Voucher'));
-document.getElementById('transfer_space').appendChild(_send_transaction_btn('Space', 'Rent a Room at KW'));
-document.getElementById('transfer_dinner').appendChild(_send_transaction_btn('Dinner', 'Get invited to a Dinner'));
-document.getElementById('transfer_visit').appendChild(_send_transaction_btn('Visit', 'Get a Tour'));
-document.getElementById('transfer_meeting').appendChild(_send_transaction_btn('Meeting', 'Get a Meeting'));
-document.getElementById('transfer_cataloge').appendChild(_send_transaction_btn('Cataloges', 'Get Cataloges'));
-document.getElementById('transfer_studiospace').appendChild(_send_transaction_btn('Studiospace', 'Rent Studiospace'));
-document.getElementById('transfer_guidedtour').appendChild(_send_transaction_btn('GuidedTour', 'Guided Tour'));
+  $('#token_balance').append(_get_balance_btn());
+  $('#token_mint').append(_mint_tokens());
+  $('#transfer_tickets').append(_send_transaction_btn('Ticket', 'Buy Ticket Voucher'));
+  $('#transfer_space').append(_send_transaction_btn('Space', 'Rent a Room at KW'));
+  $('#transfer_dinner').append(_send_transaction_btn('Dinner', 'Get invited to a Dinner'));
+  $('#transfer_visit').append(_send_transaction_btn('Visit', 'Get a Tour'));
+  $('#transfer_meeting').append(_send_transaction_btn('Meeting', 'Get a Meeting'));
+  $('#transfer_cataloge').append(_send_transaction_btn('Cataloges', 'Get Cataloges'));
+  $('#transfer_studiospace').append(_send_transaction_btn('Studiospace', 'Rent Studiospace'));
+  $('#transfer_guidedtour').append(_send_transaction_btn('GuidedTour', 'Guided Tour'));
 
-_get_balance();
+
+  let transferProcessed = false;
+
+  $('#ishtar')
+  // .hide()
+      .on('formvalid.zf.abide', function() {
+        if ( transferProcessed === false ) {
+          processTransfer().then(function (result) {
+            console.log(result.data);
+            if (result.data === 'OKZ') {
+              console.log('transferProcessed');
+              transferProcessed = true;
+              // setTimeout(function(){ alert("Hello"); }, 3000);
+              $('#ishtar').submit();
+            }
+          })
+        }
+      })
+      .on('sumbit', e => {
+
+        if (transferProcessed === true) {
+          const form = e.target;
+
+          fetch(form.action, {
+            method: form.method,
+            body: new FormData(form)
+          })
+        }
+
+        e.preventDefault();
+      });
+
+  _get_balance();
+});
