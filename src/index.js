@@ -16,6 +16,7 @@ let transfer_response;
 
 let current_balance = 0;
 
+const wallet_warning = document.getElementById('wallet_warning');
 const balance_text = document.getElementById('balance_text');
 const productTitle = document.getElementById('product-title');
 const warning_text = document.getElementById('warning_texts');
@@ -32,6 +33,8 @@ function _send_transaction_btn(btn_id, btn_text){
   btn.setAttribute('id', btn_id);
   btn.setAttribute('data-price', amount_to_pay);
   btn.innerHTML = btn_text + ' (' + amount_to_pay + ')';
+  btn.classList.add('button');
+  btn.classList.add('ishtar-dark');
   btn.onclick = async () => {
     transfer(btn);
   }
@@ -39,36 +42,34 @@ function _send_transaction_btn(btn_id, btn_text){
 }
 
 
-async function transfer(button){
-  await _get_balance();
-  const name = button.id;
-  const value = button.innerHTML;
-  const product_price = config[name];
+async function transfer(button) {
+  await _get_balance().then(function () {
+    const name = button.id;
+    const value = button.innerHTML;
+    const product_price = config[name];
 
-  productTitle.innerHTML = value;
+    productTitle.innerHTML = value;
+    wallet_warning.style.display = 'block';
 
-  if(current_balance >= product_price){
-    product.value = value;
-    transaction_amount = product_price;
-    // signed_data = await sign_transaction(address_send, product_price);
-    // generate_qr(signed_data);
+    if(current_balance >= product_price){
+      product.value = value;
+      transaction_amount = product_price;
 
-    // await processTransfer();
-
-    ishtarForm.style.display = 'block';
-    warning_text.style.display = 'none';
-    warning_text.innerHTML = '';
-  }
-  else if (current_balance < product_price) {
-    transaction_amount = '';
-    signed_data = '';
-    product.value = '';
-    qr_code_base64.value = '';
-    qr_signed_data.value = '';
-    ishtarForm.style.display = 'none';
-    warning_text.innerHTML = 'Insufficiant account balance. You need at least ' + product_price + ' for this item. Your current balance is ' + current_balance;
-    warning_text.style.display = 'block';
-  }
+      ishtarForm.style.display = 'block';
+      warning_text.style.display = 'none';
+      warning_text.innerHTML = '';
+    }
+    else if (current_balance < product_price) {
+      transaction_amount = '';
+      signed_data = '';
+      product.value = '';
+      qr_code_base64.value = '';
+      qr_signed_data.value = '';
+      ishtarForm.style.display = 'none';
+      warning_text.innerHTML = 'Insufficiant account balance.<br> You need at least ' + product_price + ' for this item.<br> Your current balance is ' + current_balance;
+      warning_text.style.display = 'block';
+    }
+  });
 }
 
 
@@ -80,17 +81,17 @@ async function processTransfer() {
   await generate_qr(signed_data).then(function(result) {
     qr_code_base64.value = result;
     qr_signed_data.value = signed_data;
-    console.log('generate_qr result: ' + result);
+    // console.log('generate_qr result: ' + result);
   });
 
-  console.log('post generate_qr');
+  // console.log('post generate_qr');
 
-  console.log('processTransfer');
-  console.log(address, address_send, transaction_amount, nounce, signed_data);
+  // console.log('processTransfer');
+  // console.log(address, address_send, transaction_amount, nounce, signed_data);
 
   const transfer_result = await transfer_to(address, address_send, transaction_amount, nounce, signed_data);
 
-  console.log('transfer_result: ' + transfer_result.data);
+  // console.log('transfer_result: ' + transfer_result.data);
 
   return transfer_result;
   // return 'OK';
@@ -98,22 +99,27 @@ async function processTransfer() {
 
 
 function _mint_tokens() {
-  const btn1 = document.createElement('button');
-  btn1.innerHTML = 'Mint Tokens!';
-  btn1.onclick = async () => {
+  const btn = document.createElement('button');
+  const text = document.getElementById('mint_text');
+  btn.innerHTML = 'Mint Tokens!';
+  btn.classList.add('button');
+  btn.classList.add('hollow');
+  btn.onclick = async () => {
     const address = await get_address();
     const nounce = await get_nounce();
     const tokens = await get_user_stats();
-    if(Number(tokens) > 0){
-      const signed_data = await sign_minting(tokens)
-      await mint_to(address, tokens, nounce, signed_data)
+    if (Number(tokens) > 0) {
+      const signed_data = await sign_minting(tokens);
+      await mint_to(address, tokens, nounce, signed_data);
+      text.innerHTML = 'Your tokens are now being minted. Please allow this process to take several minutes before checking your balance.';
+      text.style.display = 'block';
     } else {
-      var text = document.getElementById('warning_texts')
-      text.innerHTML = 'insuffiant unminted tokens';
+      text.style.display = 'block';
+      text.innerHTML = 'Insufficiant unminted tokens! Try again later.';
     }
   }
 
-  return btn1;
+  return btn;
 }
 
 
@@ -121,6 +127,8 @@ function _get_balance_btn() {
   const btn = document.createElement('button');
   btn.setAttribute('id','balance_button')
   btn.innerHTML = 'Check balance';
+  btn.classList.add('button');
+  btn.classList.add('hollow');
   btn.onclick = function () {
     _get_balance();
   };
@@ -128,19 +136,20 @@ function _get_balance_btn() {
 }
 
 
-function _get_balance() {
+async function _get_balance() {
   let address = get_address();
 
-  axios.post('http://nascentstudio.xyz/get_balance',
+  await axios.post('http://nascentstudio.xyz/get_balance',
       querystring.stringify({
         address: address
       }), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
-      }).then(function(response) {
-    current_balance = balance_text.innerHTML = BigNumber(response.data)
-  });
+      })
+      .then(function(response) {
+        current_balance = balance_text.innerHTML = BigNumber(response.data)
+      });
 }
 
 $(document).ready(function () {
@@ -160,7 +169,7 @@ $(document).ready(function () {
   let transferProcessed = false;
 
   $('#ishtar')
-  // .hide()
+  .hide()
       .on('formvalid.zf.abide', function() {
         if ( transferProcessed === false ) {
           processTransfer().then(function (result) {
