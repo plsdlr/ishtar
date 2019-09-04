@@ -70,7 +70,7 @@ function timer() {
 
 export default function get_user_stats() {
     var time_spend = timer()
-    var tokens = Number(_actions.length) * Number(time_spend) * 0.0001  //// needs to add _scroll_counter
+    var tokens = Number(_actions.length) * Number(time_spend) * 0.000001  //// needs to add _scroll_counter
     //var _newstring = _actions.length.toString().concat("__"*,time_spend.toString(),"__", _scroll_counter.toString())
     //_now = new Date().getTime();
     _actions = new Array();
@@ -81,8 +81,9 @@ export default function get_user_stats() {
 
 function get_user_unminted_token() {
     var time_spend = timer()
-    var tokens = Number(_actions.length) * Number(time_spend) * 0.0001  //// needs to add _scroll_counter
+    var tokens = Number(_actions.length) * Number(time_spend) * 0.000001  //// needs to add _scroll_counter
     var round = Math.round(tokens)
+    _now = new Date().getTime();
     return round
 }
 
