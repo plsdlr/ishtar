@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": "true",
+  "main": "dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "micro": "nodemon myapp/micro_service.js",

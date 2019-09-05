@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import BigNumber from 'bignumber.js';
-import get_user_stats from './user_tracker.js';
+import { get_user_stats, add_tokens, reset_tokens } from './user_tracker.js';
 import { get_address, get_nounce, sign_minting, sign_transaction } from './wallet.js'
 import { mint_to, get_balance, transfer_to } from './post_http.js';
 import { config } from './conf.js';
@@ -43,9 +43,9 @@ function _mint_tokens() {
       var text = document.getElementById('warning_texts')
       text.innerHTML = 'insuffiant unminted tokens';
     }
+  await reset_tokens();
   }
   element.appendChild(btn1);
-
   return element;
 }
 
@@ -156,7 +156,6 @@ function _get_balance() {
   btn.setAttribute('id','balance_button')
   btn.innerHTML = 'check balance';
   btn.onclick = function() {
-
     axios.post('http://localhost:8080/get_balance',
       querystring.stringify({
         address: address
@@ -165,13 +164,16 @@ function _get_balance() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(function(response) {
-      text.innerHTML = BigNumber(response.data)
+      text.innerHTML = BigNumber(response.data);
     });
   }
   element_data.appendChild(btn);
   element_data.appendChild(text);
   return element_data;
 }
+
+
+
 
 document.getElementById('token_balance').appendChild(_get_balance());
 document.getElementById('token_mint').appendChild(_mint_tokens());
@@ -183,3 +185,15 @@ document.getElementById('transfer_meeting').appendChild(_send_transactions_meeti
 document.getElementById('transfer_cataloge').appendChild(_send_transactions_cataloges());
 document.getElementById('transfer_studiospace').appendChild(_send_transactions_studiospace());
 document.getElementById('transfer_guidedtour').appendChild(_send_transactions_guidedtour());
+
+// function init() {
+//   var p = document.getElementById('id');
+//   var text = p.getAttribute('balance_text');
+//   var value = axios_call();
+//   text.innerHTML = BigNumber(value.data);
+// };
+
+
+export function clickListener(tokendata){
+  add_tokens(tokendata);
+}
