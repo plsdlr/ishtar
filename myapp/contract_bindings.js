@@ -1,17 +1,17 @@
 const Web3 = require('web3')
 const EthCrypto = require('eth-crypto')
 require('dotenv').config()
+let infura_websocket = process.env.INFURA_WEBSOCKETS_MAINNET;
 
-const web3_for_accounts = new Web3(Web3.givenProvider || 'ws://localhost:8545', null, {}) //// getting accounts here
+const web3_for_accounts = new Web3(Web3.givenProvider || infura_websocket, null, {}) //// getting accounts here
 ///this needs to be changed
 const json_path = process.env.json_build_path
 const json = require(json_path)
 
 var contract = require('truffle-contract')
 var Ishtar = contract(json)
-const eventProvider = new Web3.providers.WebsocketProvider('ws://localhost:8545')
+const eventProvider = new Web3.providers.WebsocketProvider(infura_websocket)
 Ishtar.setProvider(eventProvider)  ///THIS FAILS WITH NEW PROVIDER
-
 
 async function pray_for_servent (address, amount, _nonce, signedMessage) {
   try {
